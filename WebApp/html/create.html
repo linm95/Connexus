@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/navigator.css" media="screen"/>
+    <link type="text/css" rel="stylesheet" href="/css/create.css" media="screen"/>
+    <title>Connexus</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+      $( "#search" ).autocomplete({
+        minLength: 1,
+        source: function( request, response ) {  
+          $.getJSON( "/autocomplete", request, function( data, status, xhr ) {
+            response( data );
+          });
+        }
+      });
+    } );
+    </script>
+</head>
+<body>
+<div class="topnav" id="myTopnav" style="padding-right: 20px">
+
+  <a class="title" href="/manage">Connexus</a>
+
+  <a href="/manage">Manage</a>
+  <a href="/create" class="active">Create</a>
+  <a href="/view">View</a>
+  <a href="/trending">Trending</a>
+  <a href="/social">Social</a>
+  <ul class="nav navbar-nav navbar-right">
+        <li>
+                <form method="post" action="/search" class="search-form">
+                    <div class="form-group has-feedback row" name="search">
+                        <div class="col-xs-6"><input type="text" class="form-control" name="searchQuery" id="search" placeholder="Search"></div>
+                        <div class="col-xs-1"><button type="submit" class="btn btn-primary"> Search</button></div>
+                    </div>
+                </form>
+            </li>
+    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
+    <li><a href="/logoff"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+  </ul>
+  <a href="javascript:void(0);" class="icon" onclick="addResponsiveClass()">&#9776;</a>
+</div>
+<br>
+
+<form method="post">
+<div id="responsive-form" class="clearfix">
+
+<div class="form-row">
+    <div class="column-half"><input type="text" class="form-control" id="nameStream" name="title">
+
+    <label for="nameStream">Name Your Stream</label>
+    </div>
+    <div class="column-half">
+        <textarea  class="form-control" id="tagYourStream" rows="5" name="tags"></textarea>
+        <label for="addSubscribers">Tag Your Stream</label>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="column-half">
+        <textarea class="form-control" id="addSubscribers" rows="5" name="subscribers"></textarea>
+        <br>
+        <textarea  class="form-control" id="optionalMessageForInvite" placeholder="Optional message for invite" rows="5"></textarea>
+        <label for="addSubscribers">Add Subscribers</label>
+    </div>
+    <div class="column-half">
+        <textarea  class="form-control" id="urlToCoverImage" name="cover_url"></textarea>
+        <label for="addSubscribers">URL to Cover Image (Can be empty)</label>
+
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="column-full">
+        <button type="submit" class="btn btn-primary">Create Stream </button>
+    </div>
+</div>
+</div><!--end responsive-form-->
+</form>
+
+<script>
+function addResponsiveClass() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+        x.className += " responsive";
+    } else {
+        x.className = "topnav";
+    }
+}
+</script>
+
+</body>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" rel="stylesheet" href="/css/navigator.css" media="screen"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Connexus</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+      $( "#search" ).autocomplete({
+        minLength: 1,
+        source: function( request, response ) {  
+          $.getJSON( "/autocomplete", request, function( data, status, xhr ) {
+            response( data );
+          });
+        }
+      });
+    } );
+    </script>
+</head>
+<body>
+
+<div class="topnav" id="myTopnav" style="padding-right: 20px">
+  <a class="title" href="/manage">Connexus</a>
+  <a href="/manage" class="active">Manage</a>
+  <a href="/create">Create</a>
+  <a href="/view">View</a>
+  <a href="/trending">Trending</a>
+  <a href="/social">Social</a>
+  <ul class="nav navbar-nav navbar-right">
+      <li>
+          <form method="post" action="/search" class="search-form">
+              <div class="form-group has-feedback row"  name="search">
+                  <div class="col-xs-6"><input type="text" class="form-control" name="searchQuery" id="search" placeholder="Search"></div>
+                  <div class="col-xs-1"><button type="submit" class="btn btn-primary"> Search</button></div>
+              </div>
+          </form>
+      </li>
+    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
+    <li><a href="/logoff"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+  </ul>
+  <a href="javascript:void(0);" class="icon" onclick="addResponsiveClass()">&#9776;</a>
+
+</div>
+
+<form id="deleteStream" action="/delete-stream" method="post">
+<div class="container">
+    <h2> Streams I own </h2>
+    <div class="table-responsive">
+      <table class="table table table-hover">
+        <thead>
+          <tr>
+
+            <th>Name</th>
+            <th>Last New Picture</th>
+            <th>Number of Pictures</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stream in own_streams %}
+          <tr>
+              <td>
+                        <a href="/view-stream?title={{stream.title}}&owner={{stream.owner}}">{{ stream.title }}</a>
+              </td>
+            <td>{{ stream.last_modified_date.strftime("%m/%d/%y") }}</td>
+            <td>{{ stream.num_photos }}</td>
+              <td><input type="checkbox" name="checkedDeletes" value="{{stream.title}}" form="deleteStream" /></td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    <button type="submit" class="btn btn-primary"> <span class="glyphicon glyphicon-remove"></span> Delete Checked Streams</button>
+</div>
+</form>
+</form>
+
+<form action="/unsubscribe-stream" method="post">
+<div class="container">
+    <h2> Streams I subscribe </h2>
+    <div class="table-responsive">
+      <table class="table table table-hover">
+        <thead>
+          <tr>
+
+            <th>Name</th>
+            <th>Last New Picture</th>
+            <th>Number of Pictures</th>
+            <th>Views</th>
+            <th>Unsubscribed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stream in subscribed_streams %}
+          <tr>
+            <td><a href=/view-stream?title={{stream.title}}&owner={{stream.owner}}>{{ stream.title }}</a></td>
+            <td>{{ stream.last_modified_date.strftime("%m/%d/%y") }}</td>
+            <td>{{ stream.num_photos }}</td>
+            <td>{{ stream.num_views }}</td>
+            <td><input type="checkbox" name="checkedUnsubscribes" value="{{stream.title}}"></td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    <button type="submit" class="btn btn-primary"> <span class="glyphicon glyphicon-remove"></span> Unsubscribe Checked Streams</button>
+</div>
+</form>
+
+
+<script>
+function addResponsiveClass() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+        x.className += " responsive";
+    } else {
+        x.className = "topnav";
+    }
+}
+</script>
+
+</body>

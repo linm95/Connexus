@@ -1,0 +1,10 @@
+cron:
+- description: update recent access frequency every 5 mins
+  url: /trending-update
+  schedule: every 5 mins
+- description: send email
+  url: /sending-mail
+  schedule: every 5 mins
+- description: update cache
+  url: /update-cache
+  schedule: every 60 mins

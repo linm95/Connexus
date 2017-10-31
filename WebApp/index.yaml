@@ -1,0 +1,35 @@
+indexes:
+- kind: Stream
+  properties:
+  - name: owner
+  - name: last_modified_date
+    direction: desc
+
+- kind: Stream
+  properties:
+  - name: subscriber
+  - name: last_modified_date
+    direction: desc
+
+- kind: Stream
+  properties:
+  - name: last_modified_date
+    direction: desc
+  - name: cover_url
+  - name: title
+
+- kind: Photo
+  ancestor: yes
+  properties:
+  - name: date
+    direction: desc
+  - name: title
+  - name: url
+
+- kind: Stream
+  properties:
+  - name: subscriber
+  - name: last_modified_date
+    direction: desc
+  - name: cover_url
+  - name: title

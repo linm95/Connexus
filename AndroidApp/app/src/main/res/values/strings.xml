@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">Connexus</string>
+    <!-- AllStreamActivity-->
+    <string name="allStreamTitle">Connexus!</string>
+    <string name="allStreamSubBtnText">My Subscribed Streams</string>
+    <string name="allStreamSchBtnText">Search</string>
+    <string name="allStreamSchBarText">Find streams</string>
+    <string name="allStreamNrbBtnText">Nearby</string>
+    <string name="rootURL">https://eco-serenity-179203.appspot.com</string>
+    <string name="allStreamURL">/all-stream-android</string>
+    <string name="subscribedStreamURL">/subscribed-stream-android</string>
+
+
+    <!-- UploadActivity-->
+    <string name="showStreamName">Stream:</string>
+    <string name="uploadBtnText">Upload</string>
+    <string name="uploadTextAreaHint">Add a message and/or tags</string>
+    <string name="useCameraBtn">Use Camera</string>
+    <string name="chooseLibraryBtn">Choose from your library</string>
+    <string name="uploadURL">/app-fix-upload</string>
+    <string name="streamTitle">title</string>
+    <string name="owner">owner</string>
+    <string name="uploadPhoto">uploadPhoto</string>
+    <string name="userID">userID</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
+    <string name="photoComments">photoComments</string>
+
+    <!-- CameraActivity-->
+    <string name="takePictureBtn">Take a Picture</string>
+    <string name="usePictureBtn">Use this picture</string>
+    <string name="backToAllStreamsBtn">Streams</string>
+
+
+
+    <!-- SingleStreamActivity-->
+    <string name="singleStreamTitle">View A Stream:</string>
+    <string name="singelStreamBckBtnText">All Streams</string>
+    <string name="singleStreamUpBtnText">Upload an Image</string>
+    <string name="singleStreamMPBtnText">More pictures</string>
+    <string name="singleStreamURL">/single-stream-android</string>
+
+    <!-- NearbyActivity-->
+    <string name="nearbyURL">/app-search-nearby</string>
+
+    <!--Strings of log in-->
+    <string name="title">Connexus!</string>
+    <string name="signOutButton">Sign out</string>
+    <string name="introductionApp">The world\'s Greatest Photosharing APP (TM). By APT Warbler.</string>
+    <string name="signStatus">You are not signed in now</string>
+    <string name="viewStreamsButton">View Streams</string>
+    <string name="client_id">928573275181/-8nas8v0jgb08c5b64hbsrl4jljp1dr8h.apps.googleusercontent.com</string>
+    <string name="signed_in_fmt">You are signed in now</string>
+    <string name="signed_out_fmt">You are signed out now</string>
+
+    <!--Strings of search-->
+    <string name="search_hint">search streams</string>
+    <string name="search_url"> </string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_sign">SignActivity</string>
+
+</resources>

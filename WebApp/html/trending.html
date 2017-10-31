@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/css/navigator.css" media="screen"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/trending.css">
+
+    <title>Connexus</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+      $( "#search" ).autocomplete({
+        minLength: 1,
+        source: function( request, response ) {  
+          $.getJSON( "/autocomplete", request, function( data, status, xhr ) {
+            response( data );
+          });
+        }
+      });
+    } );
+    </script>
+</head>
+<body>
+
+<div class="topnav" id="myTopnav" style="padding-right: 20px">
+  <a class="title" href="/manage">Connexus</a>
+  <a href="manage">Manage</a>
+  <a href="create">Create</a>
+  <a href="view">View</a>
+  <a href="trending" class="active">Trending</a>
+  <a href="social">Social</a>
+  <ul class="nav navbar-nav navbar-right">
+        <li>
+                <form method="post" action="/search" class="search-form">
+                    <div class="form-group has-feedback row" name="search">
+                        <div class="col-xs-6"><input type="text" class="form-control" name="searchQuery" id="search" placeholder="Search"></div>
+                        <div class="col-xs-1"><button type="submit" class="btn btn-primary"> Search</button></div>
+                    </div>
+                </form>
+            </li>
+    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
+    <li><a href="/logoff"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+  </ul>
+  <a href="javascript:void(0);" class="icon" onclick="addResponsiveClass()">&#9776;</a>
+</div>
+
+
+    <div class="viewAll">
+        <h2> Top 3 Trending Streams </h2><br>
+        {% for stream in streams %}
+            <div class="gallery">
+                <a  href="/view-stream?title={{stream.title}}&owner={{stream.owner}}">
+                    <img src="{{stream.cover_url}}" width="400" height="300">
+
+                 <div class="desc" style=" word-wrap: break-word">
+                     <b>{{stream.title}}</b>
+                     <br>
+                     {{stream.recent_access_freq}} views in past hour
+                 </div>
+                    </a>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+<form action="/report" method="GET">
+            <div class="updateRateCheckBox"  style=" max-width: 300px; margin-right: 2%; margin-left: auto; ">
+                <div class="checkbox">
+                  <label><input type="checkbox" value="noReport" class="radio" name="reportRate" {% if reportRate == 'noReport' %} checked {% endif %}> No reports</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="report5min" class="radio" name="reportRate" {% if reportRate == 'report5min' %} checked {% endif %}> Every 5 minutes</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value="report1hr" class="radio" name="reportRate" {% if reportRate == 'report1hr' %} checked {% endif %}> Every 1 hour</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox"  value="report1day" class="radio" name="reportRate" {% if reportRate == 'report1day' %} checked {% endif %}> Every day</label>
+                </div>
+                <div>
+                    <label>Email trending report</label>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary"> Update Rate</button>
+                </div>
+            </div>
+        </form>
+
+
+<script>
+    $("input:checkbox").click(function() {
+        if ($(this).is(":checked")) {
+            var group = "input:checkbox[name='" + $(this).attr("name") + "']";
+            $(group).prop("checked", false);
+            $(this).prop("checked", true);
+        } else {
+            $(this).prop("checked", false);
+        }
+    });
+</script>
+
+<script>
+function addResponsiveClass() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+        x.className += " responsive";
+    } else {
+        x.className = "topnav";
+    }
+}
+</script>
+
+</body>

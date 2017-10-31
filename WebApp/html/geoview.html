@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Connexus</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/navigator.css" media="screen"/>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 90%;
+        margin: 2%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+
+
+    </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!--link rel="stylesheet" href="/resources/demos/style.css"-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+      $( function() {
+        $( "#search" ).autocomplete({
+          minLength: 1,
+          source: function( request, response ) {
+            $.getJSON( "/autocomplete", request, function( data, status, xhr ) {
+              response( data );
+            });
+          }
+        });
+      } );
+    </script>
+    <script>
+      var startDate = 0;
+      var endDate = 0;
+      function getStartDate(number){
+        var start = new Date();
+        start.setDate(start.getDate() - 365 + number);
+        startDate = number;
+        return start.toDateString().substring(4);
+      }
+      function getEndDate(number){
+        var end = new Date();
+        end.setDate(end.getDate() - 365 + number);
+        endDate = number;
+        return end.toDateString().substring(4);
+      }
+    </script>
+    <script>
+    $( function() {
+      $( "#slider-range" ).slider({
+        range: true,
+        min: 0,
+        max: 365,
+        values: [ 0, 365 ],
+        slide: function( event, ui ) {
+          $( "#time" ).val( getStartDate(ui.values[ 0 ]) + " - " +getEndDate(ui.values[ 1 ]) );
+          initMap();
+        }
+      });
+      $( "#time" ).val( getStartDate($( "#slider-range" ).slider( "values", 0 )) + " - " + 
+        getEndDate($( "#slider-range" ).slider( "values", 1 ) ));
+    });
+    </script>
+    <script>
+      
+            var zoom_factor = 3;
+            var map_center = {lat: -28.024, lng: 140.887};
+      
+            function initMap() {
+              var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: zoom_factor,
+                center: map_center//{lat: map_center[0], lng: map_center[1]}
+              });
+      
+              map.addListener('center_changed',function(){
+                center = map.getCenter();
+                map_center.lat = center.lat();
+                map_center.lng = center.lng();
+              });
+              map.addListener('zoom_changed',function(){
+                zoom_factor = map.getZoom();
+              });
+      
+              // Create an array of alphabetical characters used to label the markers.
+              var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      
+              // Add some markers to the map.
+              // Note: The code uses the JavaScript Array.prototype.map() method to
+              // create an array of markers based on a given "locations" array.
+              // The map() method here has nothing to do with the Google Maps API.
+      
+              var markers = locations.map(function(location,i) {
+                  return {marker: new google.maps.Marker({
+                    position: location.co,
+                    label: labels[i % labels.length]
+                  }), day: location.day};
+                });
+      
+              var infowindows = images.map(function(image) {
+                  return new google.maps.InfoWindow({
+                    content: image
+                  });
+                });
+      
+      
+              {% for i in range(num_photos)%}
+                markers[{{i}}].marker.addListener('mouseover', function() {
+                infowindows[{{i}}].open(map, markers[{{i}}].marker);
+                });
+                markers[{{i}}].marker.addListener('mouseout', function() {
+                  infowindows[{{i}}].close();
+                });
+              {% endfor %}
+              
+                var filteredMarkers = markers.reduce(function(re, marker){
+                  if(marker.day >= 365 - endDate && marker.day <= 365 - startDate){
+                    re.push(marker.marker);
+                  }
+                  return re;
+                },[]);
+      
+              // Add a marker clusterer to manage the markers.
+              var markerCluster = new MarkerClusterer(map, filteredMarkers,
+                  {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+            }
+      
+            var days = [
+              {% for day in days %}
+              {{day}},
+              {% endfor %}
+            ]
+      
+            var images = [
+              {% for photo in photos %}        
+              '<img src="{{photo.url}}">',
+              {% endfor %}
+            ]
+      
+            var locations = [
+              {% for photo in photos %}
+              {co: {lat: {{photo.loc.lat}}, lng: {{photo.loc.lon}}}, day: days[{{loop.index-1}}]},
+              {% endfor %}
+            ]
+      
+          </script>
+  </head>
+  <body>
+    <div class="topnav" id="myTopnav" style="padding-right: 20px">
+
+        <a class="title" href="/manage">Connexus</a>
+
+        <a href="/manage">Manage</a>
+        <a href="/create">Create</a>
+        <a href="/view">View</a>
+        <a href="/trending">Trending</a>
+        <a href="/social">Social</a>
+        <ul class="nav navbar-nav navbar-right">
+              <li>
+                      <form method="post" action="/search" class="search-form">
+                          <div class="form-group has-feedback row" name="search">
+                              <div class="col-xs-6"><input type="text" class="form-control" name="searchQuery" id="search" placeholder="Search"></div>
+                              <div class="col-xs-1"><button type="submit" class="btn btn-primary"> Search</button></div>
+                          </div>
+                      </form>
+                  </li>
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
+          <li><a href="/logoff"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+        </ul>
+        <a href="javascript:void(0);" class="icon" onclick="addResponsiveClass()">&#9776;</a>
+  </div>
+
+    <div id="map"></div>
+    
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzb1r1F9RDllX_KX8liuGtNmNpcLVmf9Q&callback=initMap">
+    </script>
+    <div style="margin:2%">
+      <p>
+      <label for="time">Time Range:</label>
+      <input type="text" id="time" readonly style="border:0; color:#f6931f; font-weight:bold; width:200px">
+      </p>
+
+      <div id="slider-range" ></div>
+    </div>
+  </body>
+</html>

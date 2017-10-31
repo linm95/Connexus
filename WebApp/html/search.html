@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/navigator.css" media="screen"/>
+    <link type="text/css" rel="stylesheet" href="/css/search.css" media="screen"/>
+    <title>Connexus</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+      $( "#search" ).autocomplete({
+        minLength: 1,
+        source: function( request, response ) {  
+          $.getJSON( "/autocomplete", request, function( data, status, xhr ) {
+            response( data );
+          });
+        }
+      });
+    } );
+    </script>
+
+</head>
+<body>
+
+<div class="topnav" id="myTopnav" style="padding-right: 20px">
+  <a class="title" href="/manage">Connexus</a>
+  <a href="manage">Manage</a>
+  <a href="create">Create</a>
+  <a href="view">View</a>
+  <a href="trending">Trending</a>
+  <a href="social">Social</a>
+  <ul class="nav navbar-nav navbar-right">
+    <li>
+        <form method="post" action="/search" class="search-form">
+            <div class="form-group has-feedback row" name="search">
+                <div class="col-xs-6"><input type="text" class="form-control" name="searchQuery" id="search" placeholder="Search"></div>
+                <div class="col-xs-1"><button type="submit" class="btn btn-primary"> Search</button></div>
+            </div>
+        </form>
+    </li>
+    <li><a href="#"><span class="glyphicon glyphicon-user"></span> {{ user }}</a></li>
+    <li><a href="/logoff"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+  </ul>
+  <a href="javascript:void(0);" class="icon" onclick="addResponsiveClass()">&#9776;</a>
+</div>
+
+
+<br>
+    <br>
+
+    {% if query %}
+    <div class="viewAll" id="viewAll">
+        <p> {{streams|length}} results for <b>{{query}}</b>, click on a image to view stream </p>
+        <br>
+            {% if streams %}
+                {% for stream in streams %}
+                    <div class="gallery">
+                        <a  href="/view-stream?title={{stream.title}}&owner={{stream.owner}}">
+                            <img src="{{stream.cover_url}}" alt="Image Not Found" width="400" height="300">
+
+                         <div class="desc" style=" word-wrap: break-word">{{stream.title}}
+
+                         </div>
+                        </a>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+    </div>
+    {% endif %}
+
+
+<script>
+function addResponsiveClass() {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+        x.className += " responsive";
+    } else {
+        x.className = "topnav";
+    }
+}
+</script>
+
+</body>

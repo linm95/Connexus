@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.warbler.connexus.NearbyActivity">
+
+    <TextView
+        android:id="@+id/nearbyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/allStreamTitle"
+        android:textAlignment="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/nearbyBtnBck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:onClick="backToAllStream"
+        android:text="View All Streams"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="16dp"
+        android:text="Nearby Pictures"
+        app:layout_constraintBottom_toTopOf="@+id/nearbyBtnBck"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/textView5"
+        android:layout_marginStart="16dp" />
+
+    <Button
+        android:id="@+id/nearbyBtnMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:onClick="getMorePictures"
+        android:text="@string/singleStreamMPBtnText"
+        android:textAllCaps="false"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView5"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <GridView
+        android:id="@+id/nearbyBody"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:horizontalSpacing="16dp"
+        android:numColumns="4"
+        android:verticalSpacing="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/nearbyBtnMore"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nearbyTitle" />
+</android.support.constraint.ConstraintLayout>
